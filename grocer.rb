@@ -53,5 +53,20 @@ def apply_clearance(cart)
 end
 
 def checkout(cart, coupons)
-  
+  consol_cart = consolidate_cart(cart)
+  applied_coupons = apply_coupons(consol_cart, coupons)
+  final_cart = apply_clearance(applied_coupons)
+
+  total = 0
+  final_cart.each { |item, val|
+    if !item.match(/W\/COUPON/) && val[:count] > 0
+      price = val[:price] * val[:count]
+      total += price
+    elsif item.match(/W\/COUPON/) && val[:count] > 0
+      price = val[:price] * val[:count]
+      total += price
+    end
+  }
+
+  total
 end
